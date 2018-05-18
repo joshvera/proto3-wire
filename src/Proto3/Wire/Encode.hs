@@ -108,7 +108,7 @@ import           Proto3.Wire.Types
 --
 -- Use `toLazyByteString` when you're done assembling the `MessageBuilder`
 newtype MessageBuilder = MessageBuilder { unMessageBuilder :: WB.Builder }
-  deriving Monoid
+  deriving (Semigroup, Monoid)
 
 instance Show MessageBuilder where
   showsPrec prec builder =
