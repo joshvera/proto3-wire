@@ -97,7 +97,7 @@ import           Data.Serialize.Get      ( Get, getWord8, getByteString, getInt3
                                          , runGet , isEmpty )
 import           Data.Serialize.IEEE754  ( getFloat32le, getFloat64le )
 import           Data.Text.Lazy          ( Text, pack )
-import           Data.Text.Lazy.Encoding ( decodeUtf8' )
+import           Data.Text.Lazy.Encoding ( decodeUtf8, decodeUtf8' )
 import qualified Data.Traversable        as T
 import           Data.Int                ( Int32, Int64 )
 import           Data.Word               ( Word8, Word32, Word64 )
@@ -544,7 +544,7 @@ embeddedToParsedFields :: RawPrimitive -> Either ParseError RawMessage
 embeddedToParsedFields (LengthDelimitedField bs) =
     case decodeWire bs of
         Left err -> Left (EmbeddedError ("Failed to parse embedded message: "
-                                             <> (pack err))
+                                             <> (pack err) <> "\n" <> decodeUtf8 (BL.fromStrict bs))
                                         Nothing)
         Right result -> return (toMap result)
 embeddedToParsedFields wrong =
